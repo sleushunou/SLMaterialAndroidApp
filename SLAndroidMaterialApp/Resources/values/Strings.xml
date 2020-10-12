@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">SLAndroidMaterialApp</string>
+    <string name="action_settings">Settings</string>
+    <string name="search">Search</string>
+    <string name="all">All</string>
+    <string name="recent">Recent</string>
+    <string name="fav">Fav</string>
+    <string name="shared_with_me">Shared with me</string>
+    <string name="trash">Trash</string>
+</resources>
