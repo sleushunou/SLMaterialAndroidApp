@@ -32,8 +32,6 @@ namespace SLAndroidMaterialApp
         public override void OnViewCreated(View view, Bundle savedInstanceState)
         {
             base.OnViewCreated(view, savedInstanceState);
-
-            _drawerLayout = view.FindViewById<DrawerLayout>(Resource.Id.fragment_main_drawer_layout);
             
             var appBar = view.FindViewById<BottomAppBar>(Resource.Id.fragment_main_bottomAppBar);
             if (appBar != null)
@@ -50,6 +48,7 @@ namespace SLAndroidMaterialApp
             {
                 topAppBar.NavigationClick += (sender, args) =>
                 {
+                    _drawerLayout = Activity.FindViewById<DrawerLayout>(Resource.Id.fragment_main_drawer_layout);
                     _drawerLayout.OpenDrawer((int) GravityFlags.Start);
                 };
             }
@@ -64,7 +63,7 @@ namespace SLAndroidMaterialApp
             _tabLayout = view.FindViewById<TabLayout>(Resource.Id.fragment_main_tab_layout);
 
             _viewPager2 = view.FindViewById<ViewPager2>(Resource.Id.fragment_main_view_pager);
-            _viewPager2.Adapter = new ViewPagerAdapter(this, ChildFragmentManager, Lifecycle);
+            _viewPager2.Adapter = new ViewPagerAdapter(ChildFragmentManager, Lifecycle);
 
             _tabLayoutMediator = new TabLayoutMediator(_tabLayout, _viewPager2, this);
             _tabLayoutMediator.Attach();
@@ -72,13 +71,6 @@ namespace SLAndroidMaterialApp
 
         private class ViewPagerAdapter : FragmentStateAdapter
         {
-            private readonly Fragment _fragment;
-            
-            public ViewPagerAdapter(Fragment fragment, FragmentManager fragmentManager, Lifecycle lifecycle) : base(fragmentManager, lifecycle)
-            {
-                _fragment = fragment;
-            }
-            
             public ViewPagerAdapter(FragmentManager fragmentManager, Lifecycle lifecycle) : base(fragmentManager, lifecycle)
             {
             }
@@ -87,29 +79,17 @@ namespace SLAndroidMaterialApp
             
             public override Fragment CreateFragment(int p0)
             {
-                return new TabFragment(_fragment);
+                return new TabFragment();
             }
         }
         
         private class TabFragment : Fragment
         {
-            private readonly Fragment _fragment;
-
-            public TabFragment()
-            {
-                
-            }
-            
-            public TabFragment(Fragment fragment)
-            {
-                _fragment = fragment;
-            }
-            
             public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
             {
                 var recyclerView = new RecyclerView(Context);
                 recyclerView.SetLayoutManager(new GridLayoutManager(Context, Resources.GetInteger(Resource.Integer.main_fragments_columns)));
-                recyclerView.SetAdapter(new MainAdapter(_fragment));
+                recyclerView.SetAdapter(new MainAdapter(this));
                 return recyclerView;
             }
         }
